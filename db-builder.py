@@ -1,5 +1,6 @@
 import pandas as pd
 from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database
 import sys
 
 df_orders = pd.read_csv('data/pbe-orders.csv')
@@ -15,6 +16,9 @@ def populate_data(usr, pswd, port, db_name):
     OUTPUT: Confirmation of DB population
     """
     engine = create_engine(f'postgresql://{usr}:{pswd}@localhost:{port}/{db_name}')
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        
     print('Engine Created')
     df_orders.to_sql('orders', engine)
     print(f'Orders data successfully loaded to {db_name}')
