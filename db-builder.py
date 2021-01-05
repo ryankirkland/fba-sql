@@ -3,8 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 import sys
 
-df_orders = pd.read_csv('data/pbe-orders.csv')
-df_returns = pd.read_csv('data/pbe-returns.csv')
+df_orders = pd.read_csv('data/fba-orders.csv')
+df_returns = pd.read_csv('data/fba-returns.csv')
 
 def populate_data(usr, pswd, port, db_name):
     """
@@ -18,7 +18,7 @@ def populate_data(usr, pswd, port, db_name):
     engine = create_engine(f'postgresql://{usr}:{pswd}@localhost:{port}/{db_name}')
     if not database_exists(engine.url):
         create_database(engine.url)
-        
+
     print('Engine Created')
     df_orders.to_sql('orders', engine)
     print(f'Orders data successfully loaded to {db_name}')
